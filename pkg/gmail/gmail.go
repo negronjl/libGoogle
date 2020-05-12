@@ -103,7 +103,7 @@ func ArchiveMessage(httpClient *http.Client, userEmail string, messageId string)
 		userEmail,
 		messageId,
 		&gmail.ModifyMessageRequest{
-			RemoveLabelIds: []string{"inbox"},
+			RemoveLabelIds: []string{"INBOX"},
 		}).Do()
 	if err != nil {
 		return gmail.Message{}, err
