@@ -99,18 +99,14 @@ func ArchiveMessage(httpClient *http.Client, userEmail string, messageId string)
 		return gmail.Message{}, err
 	}
 
-	response := service.Users.Messages.Modify(
+	response, err := service.Users.Messages.Modify(
 		userEmail,
 		messageId,
 		&gmail.ModifyMessageRequest{
 			RemoveLabelIds: []string{"label:inbox"},
-		})
-	if response == nil {
-		return gmail.Message{}, errors.New("Unable to archive message ")
-	}
-	returnValue, err := GetMessageById(httpClient, userEmail, messageId)
+		}).Do()
 	if err != nil {
 		return gmail.Message{}, err
 	}
-	return returnValue, nil
+	return *response, nil
 }
