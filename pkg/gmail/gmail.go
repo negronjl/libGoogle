@@ -110,3 +110,30 @@ func ArchiveMessage(httpClient *http.Client, userEmail string, messageId string)
 	}
 	return *response, nil
 }
+
+func UnArchiveMessage(httpClient *http.Client, userEmail string, messageId string) (gmail.Message, error) {
+	if httpClient == nil {
+		return gmail.Message{}, errors.New("Empty httpClient ")
+	}
+	if userEmail == "" {
+		return gmail.Message{}, errors.New("Empty userEmail ")
+	}
+	if messageId == "" {
+		return gmail.Message{}, errors.New("Empty messageId ")
+	}
+	service, err := gmail.New(httpClient)
+	if err != nil {
+		return gmail.Message{}, err
+	}
+
+	response, err := service.Users.Messages.Modify(
+		userEmail,
+		messageId,
+		&gmail.ModifyMessageRequest{
+			AddLabelIds: []string{"INBOX"},
+		}).Do()
+	if err != nil {
+		return gmail.Message{}, err
+	}
+	return *response, nil
+}

@@ -63,5 +63,21 @@ func main() {
 	}
 	fmt.Printf("Label count: %d\n", len(labels))
 	fmt.Printf("Message count: %d\n", len(messages))
+	lastMessageId := messages[len(messages)-1].Id
+	fmt.Printf("Last Message ID: %v\n", lastMessageId)
+	lastMessage, err := gmail2.GetMessageById(client, userEmail, lastMessageId)
+	if err != nil {
+		fmt.Printf("Unable to get message id: %v", lastMessageId)
+	} else {
+		fmt.Println(lastMessage)
+	}
+	archivedMessage, err := gmail2.ArchiveMessage(client, userEmail, lastMessageId)
+	if err != nil {
+		fmt.Printf("Unable to archive message ID: %v", lastMessageId)
+	} else {
+		fmt.Println(archivedMessage)
+	}
+
+
 
 }
