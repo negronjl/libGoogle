@@ -77,7 +77,7 @@ func GetMessageById(httpClient *http.Client, userEmail string, messageId string)
 	if err != nil {
 		return gmail.Message{}, err
 	}
-	message, err := service.Users.Messages.Get(userEmail, messageId).Do()
+	message, err := service.Users.Messages.Get(userEmail, messageId).Format("raw").Do()
 	if err != nil {
 		return gmail.Message{}, err
 	}

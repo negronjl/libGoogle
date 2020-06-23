@@ -6,20 +6,23 @@ import (
 	"github.com/negronjl/libGoogle/pkg/gauth"
 	"log"
 	"os"
+	"flag"
 )
 
 func main() {
-	cjson := os.Getenv("CREDENTIALS_JSON")
-	if cjson == "" {
-		log.Fatal("Unable to load CREDENTIALS_JSON environment variable ")
+	cjson := flag.String("cjson", "", " Location of credentials.json file")
+	scopes := flag.String("scopes", "", " Locations of the scopes.json file")
+	flag.Parse()
+
+	if *cjson == "" || *scopes == "" {
+		flag.PrintDefaults()
+		os.Exit(1)
 	}
-	scopes := os.Getenv("SCOPES")
-	if scopes == "" {
-		log.Fatal("Unable to load SCOPES environment variable ")
-	}
-	token, err := gauth.GetToken(cjson, scopes)
+
+	token, err := gauth.GetToken(*cjson, *scopes)
 	if err != nil {
 		log.Fatalf("Unable to get token: %v", err)
 	}
+
 	fmt.Printf("Token: [%v]\n", base64.StdEncoding.EncodeToString(token))
 }
